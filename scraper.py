@@ -32,7 +32,6 @@ def scrape():
         }
         dog['Name'] = dog_bite.find("div", class_ = "animal_name").text
         dog['ID'] = dog_bite.find("div", class_ = "animal_id").text.replace('(','').replace(')','')
-
         dog_desc = dog_bite.find_all("div", class_ = "animal_desc")
         dog['Sex'] = dog_desc[1].text
         dog['Breed'] = dog_desc[0].text
@@ -41,7 +40,6 @@ def scrape():
         dog['Location'] = dog_bite.find("div", class_ = "animal_location").text
         dog['First_Found'] = datetime.now().strftime(time_format)
         dogs.append(dog)
-    print(dogs[0])
     new_doggie_df = pd.DataFrame(dogs)
     new_doggie_df = new_doggie_df.set_index('ID')
     new_doggie_df.to_csv('New_Dogs.csv')
@@ -52,10 +50,27 @@ def scrape():
     doggie_df = pd.concat([doggie_df, new_doggie_df])
     doggie_df = doggie_df.groupby('ID').first()
     doggie_df.to_csv('Dogs.csv')
-c = 0
-while c<20000:
-    scrape()
-    c+=1
-    print(f"Ran {c} times.  Last ran {datetime.now().strftime(time_format)}")
-    time.sleep(1800)
+
+def run_loop():
+    c = 0
+    while c<20000:
+        try:
+            scrape()
+            c+=1
+            print(f"Ran {c} times.  Last ran {datetime.now().strftime(time_format)}")
+        except:
+            try:
+                print("     Had an error, trying again in 5 seconds...")
+                time.sleep(5)
+                scrape()
+                print(f"Ran {c} times.  Last ran {datetime.now().strftime(time_format)}")
+            except:
+                try:
+                    print("         Had another error, trying again in 5 minutes")
+                    time.sleep(300)
+                    scrape()
+                    print(f"Ran {c} times.  Last ran {datetime.now().strftime(time_format)}")
+                except:
+                    print("             Had YET ANOTHER error, skipping this cycle")
+        time.sleep(1800)
 #%%
