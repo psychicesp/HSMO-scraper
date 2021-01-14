@@ -74,5 +74,13 @@ def run_loop():
                     print(f"Ran {c} times.  Last ran {datetime.now().strftime(time_format)}")
                 except:
                     print("             Had YET ANOTHER error, skipping this cycle")
+        if c%5 == 0:
+            try:
+                !git add Dogs.csv
+                !git commit -m "Fetched dogs"
+                !git push
+                print("Successfully pushed changes")
+            except:
+                print("Error updating repo, its cool though")
         time.sleep(1800)
-#%%
+        #%%
