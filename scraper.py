@@ -63,12 +63,14 @@ def run_loop():
                 print("     Had an error, trying again in 5 seconds...")
                 time.sleep(5)
                 scrape()
+                c+=1
                 print(f"Ran {c} times.  Last ran {datetime.now().strftime(time_format)}")
             except:
                 try:
                     print("         Had another error, trying again in 5 minutes")
                     time.sleep(300)
                     scrape()
+                    c+=1
                     print(f"Ran {c} times.  Last ran {datetime.now().strftime(time_format)}")
                 except:
                     print("             Had YET ANOTHER error, skipping this cycle")
